@@ -15,7 +15,7 @@ const railsLogFile = path.join(screenshotsDir, "rails.log");
 const reactLogFile = path.join(screenshotsDir, "react.log");
 
 const railsRepo = {
-  url: "https://github.com/ManchesterMakerspace/makerspace-rails.git",
+  url: "https://github.com/Kv603/makerspace-rails.git",
 }
 
 const integrationTest = async () => {
@@ -75,11 +75,15 @@ const integrationTest = async () => {
       console.log(`Starting test`);
       runCmd(`RAILS_DIR=${railsFolder} PORT=3035 yarn e2e`, reactLogs, endProcess);
     };
-    const startReact = () => {
+    const startReact = () => { 
+      console.log(`Waiting on http://localhost:${port}`);
+      //const slept = execSync('sleep 10', { encoding: 'utf8', stdio: 'inherit' });
+      const waiter = execSync(`npx wait-on --timeout 20000 http://localhost:${port}`, { encoding: 'utf8', stdio: 'inherit' });
+      console.log(waiter);
       process.chdir(reactFolder);
       console.log(`Starting React`);
       runCmd(`yarn start`, reactLogs);
-      setTimeout(startTest, 10 * 1000);
+      setTimeout(startTest, 25 * 1000);
     };
     const startRails = () => {
       process.chdir(railsFolder);
